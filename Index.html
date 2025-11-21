@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DataFlow IA - Informe Estratégico Acordeón</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --neon-cyan: #00ffff;
+            --neon-pink: #ff003c;
+            --dark-bg: #050505;
+            --panel-bg: rgba(20, 20, 20, 0.95);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: #e0e0e0;
+            font-family: 'Rajdhani', sans-serif;
+            overflow-x: hidden;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding-bottom: 80px; /* Space for the fixed footer */
+        }
+
+        /* Hero Text Styling */
+        .hero-section {
+            padding: 40px 20px;
+            text-align: center;
+            border-bottom: 2px solid var(--neon-cyan);
+            margin-bottom: 40px;
+        }
+
+        h1.hero-title {
+            font-family: 'Orbitron', sans-serif;
+            /* Optimized font size for impact */
+            font-size: clamp(3rem, 8vw, 6rem); 
+            color: var(--neon-cyan);
+            text-transform: uppercase;
+            line-height: 1;
+            /* THE REQUESTED SHADOW STYLE */
+            text-shadow: 
+                6px 6px 0px #000000, 
+                0 0 30px rgba(0, 255, 255, 0.6);
+            margin-bottom: 10px;
+        }
+
+        h2.hero-subtitle-new {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: clamp(1rem, 3vw, 1.5rem);
+            color: #ccc;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .hero-info-tag {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.9rem;
+            color: var(--neon-pink);
+            letter-spacing: 2px;
+        }
+
+        /* MAIN CONTAINER & ACCORDION */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .accordion-item {
+            margin-bottom: 20px;
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            background: rgba(10, 10, 10, 0.9);
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.1);
+        }
+
+        .accordion-header {
+            display: flex;
+            align-items: center;
+            padding: 20px 30px;
+            cursor: pointer;
+            background: rgba(0, 255, 255, 0.05);
+            border-left: 5px solid var(--neon-pink);
+            transition: all 0.3s ease;
+        }
+
+        .accordion-header:hover {
+            background: rgba(0, 255, 255, 0.15);
+            border-left-color: var(--neon-cyan);
+        }
+
+        .accordion-header.active {
+            border-left-color: var(--neon-cyan);
+            background: rgba(0, 255, 255, 0.2);
+        }
+
+        .accordion-header h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            color: #fff;
+            flex-grow: 1;
+        }
+
+        .accordion-icon {
+            font-size: 1.2rem;
+            color: var(--neon-cyan);
+            transition: transform 0.3s ease;
+        }
+
+        .accordion-header.active .accordion-icon {
+            transform: rotate(90deg);
+        }
+
+        /* ACCORDION CONTENT */
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out, padding 0.5s ease-out;
+            padding: 0 30px;
+        }
+
+        .accordion-content.active {
+            /* Max height is estimated based on content size */
+            max-height: 1500px; 
+            padding: 30px;
+            padding-top: 20px;
+            border-top: 1px dashed #333;
+        }
+
+        /* Content Specific Styles (from previous report) */
+        .data-card {
+            background: rgba(0,0,0,0.5);
+            border: 1px solid #333;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .card-icon {
+            font-size: 1.5rem;
+            color: var(--neon-cyan);
+            margin-bottom: 10px;
+        }
+
+        .card-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+
+        /* Metrics */
+        .metric { margin-bottom: 15px; }
+        .metric-label { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 0.9rem; font-family: 'Share Tech Mono', monospace; }
+        .metric-bar-bg { width: 100%; height: 8px; background: #222; position: relative; }
+        .metric-bar-fill { height: 100%; background: var(--neon-cyan); width: 0%; transition: width 1.5s ease-in-out; box-shadow: 0 0 8px var(--neon-cyan); }
+
+        /* Table */
+        .cyber-table { width: 100%; border-collapse: collapse; margin-top: 20px; font-family: 'Share Tech Mono', monospace; }
+        .cyber-table th, .cyber-table td { padding: 10px; text-align: left; border-bottom: 1px solid #333; }
+        .cyber-table th { color: var(--neon-cyan); text-transform: uppercase; border-bottom: 2px solid var(--neon-cyan); }
+        .cyber-table tr:hover td { background: rgba(0, 255, 255, 0.05); }
+
+
+        /* FOOTER */
+        footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: #000;
+            border-top: 2px solid var(--neon-cyan);
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 12px;
+            color: #888;
+            z-index: 100;
+        }
+
+        .footer-logo {
+            color: var(--neon-cyan);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 14px;
+        }
+
+        .footer-links span {
+            margin-left: 20px;
+        }
+        
+    </style>
+</head>
+<body>
+
+    <!-- HERO SECTION -->
+    <div class="hero-section">
+        <h1 class="hero-title">COMUNICACIÓN VISUAL DIGITAL</h1>
+        <h2 class="hero-subtitle-new">MENSAJES QUE CONECTAN</h2>
+        <p class="hero-info-tag">INFORME ESTRATÉGICO MULTICANAL 2025 // ACCESO RESTRINGIDO</p>
+    </div>
+
+    <div class="container">
+
+        <!-- ACCORDION 1: QUÉ, CÓMO Y PARA QUIÉN -->
+        <div class="accordion-item" id="item1">
+            <div class="accordion-header" onclick="toggleAccordion('item1')">
+                <i class="fas fa-chart-line" style="margin-right: 15px; color: var(--neon-pink);"></i>
+                <h2>01. QUÉ, CÓMO Y PARA QUIÉN</h2>
+                <i class="fas fa-chevron-right accordion-icon"></i>
+            </div>
+            <div class="accordion-content">
+                <p style="font-size: 1.1rem; margin-bottom: 20px;">
+                    El panorama actual exige una integración híbrida entre canales <strong>Digitales</strong> y <strong>Físicos</strong>. Este informe detalla las herramientas óptimas para la emisión de mensajes basadas en la arquitectura de DataFlow IA, priorizando el Retorno de Inversión (ROI).
+                </p>
+                <div class="metric">
+                    <div class="metric-label"><span>PENETRACIÓN DIGITAL</span><span>85%</span></div>
+                    <div class="metric-bar-bg"><div class="metric-bar-fill" data-width="85%"></div></div>
+                </div>
+                <div class="metric">
+                    <div class="metric-label"><span>IMPACTO FÍSICO (RETORNO)</span><span>60%</span></div>
+                    <div class="metric-bar-bg"><div class="metric-bar-fill" data-width="60%"></div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ACCORDION 2: ECOSISTEMA DIGITAL -->
+        <div class="accordion-item" id="item2">
+            <div class="accordion-header" onclick="toggleAccordion('item2')">
+                <i class="fas fa-globe" style="margin-right: 15px; color: var(--neon-pink);"></i>
+                <h2>02. ECOSISTEMA DIGITAL (ONLINE)</h2>
+                <i class="fas fa-chevron-right accordion-icon"></i>
+            </div>
+            <div class="accordion-content">
+                <div class="cards-grid">
+                    <!-- Web -->
+                    <div class="data-card">
+                        <i class="fas fa-terminal card-icon"></i>
+                        <h3 class="card-title">WEB / LANDING</h3>
+                        <p>El núcleo central de la identidad. La **Landing Page** está optimizada para la conversión rápida (Lead Generation).</p>
+                    </div>
+                    <!-- Social -->
+                    <div class="data-card">
+                        <i class="fas fa-bullhorn card-icon"></i>
+                        <h3 class="card-title">REDES & GRÁFICAS</h3>
+                        <p>Uso de **Tarjetas Gráficas** y Banners diseñados para el impacto visual inmediato y la interrupción del scroll.</p>
+                    </div>
+                    <!-- Content -->
+                    <div class="data-card">
+                        <i class="fas fa-podcast card-icon"></i>
+                        <h3 class="card-title">PODCASTS / INFO</h3>
+                        <p>**Infografías** para la síntesis de datos y **Podcasts** para generar conexión íntima y fidelización auditiva.</p>
+                    </div>
+                    <!-- Email -->
+                    <div class="data-card">
+                        <i class="fas fa-envelope card-icon"></i>
+                        <h3 class="card-title">EMAIL MARKETING</h3>
+                        <p>Canal de comunicación directa con el mayor Retorno de Inversión (ROI) para campañas personalizadas.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ACCORDION 3: SOPORTES FÍSICOS -->
+        <div class="accordion-item" id="item3">
+            <div class="accordion-header" onclick="toggleAccordion('item3')">
+                <i class="fas fa-print" style="margin-right: 15px; color: var(--neon-pink);"></i>
+                <h2>03. SOPORTES FÍSICOS (OFFLINE)</h2>
+                <i class="fas fa-chevron-right accordion-icon"></i>
+            </div>
+            <div class="accordion-content">
+                <table class="cyber-table">
+                    <thead>
+                        <tr>
+                            <th>ELEMENTO</th>
+                            <th>OBJETIVO PRIMARIO</th>
+                            <th>ALCANCE</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>CARTELES / AFICHES</td>
+                            <td>Branding Masivo / Eventos.</td>
+                            <td>Alto (Vía Pública).</td>
+                        </tr>
+                        <tr>
+                            <td>PACKAGING</td>
+                            <td>Experiencia de Producto / Información legal.</td>
+                            <td>Medio (Punto de Venta).</td>
+                        </tr>
+                        <tr>
+                            <td>SEÑALÉTICA</td>
+                            <td>Guía y Flujo de Personas.</td>
+                            <td>Bajo (Ubicación Específica).</td>
+                        </tr>
+                        <tr>
+                            <td>FOLLETERÍA (Flyers)</td>
+                            <td>Información Táctica y Rápida.</td>
+                            <td>Medio (Distribución).</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ACCORDION 4: CONCLUSIÓN -->
+        <div class="accordion-item" id="item4">
+            <div class="accordion-header" onclick="toggleAccordion('item4')">
+                <i class="fas fa-lightbulb" style="margin-right: 15px; color: var(--neon-pink);"></i>
+                <h2>04. ANÁLISIS Y ESTRATEGIA</h2>
+                <i class="fas fa-chevron-right accordion-icon"></i>
+            </div>
+            <div class="accordion-content">
+                <div class="data-card" style="border-left: 4px solid var(--neon-cyan);">
+                    <h3 class="card-title" style="color: var(--neon-cyan)">CONCLUSIÓN ESTRATÉGICA</h3>
+                    <p style="font-size: 1.1rem;">
+                        La eficiencia máxima en 2025 se logra con una estrategia <strong>Omnicanal</strong> unificada. La mejor ruta de conversión comienza con una **Tarjeta Gráfica impactante** en redes, dirigiendo el tráfico a una **Landing Page** optimizada. El contenido profundo (**Podcast** o **E-book**) se utiliza para retener y fidelizar al usuario captado.
+                    </p>
+                    <br>
+                    <button style="background: var(--neon-pink); border: none; padding: 15px 30px; font-family: 'Orbitron'; font-weight: bold; cursor: pointer; color: #000; clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%); box-shadow: 0 0 15px var(--neon-pink);">
+                        IMPLEMENTAR PROTOCOLO
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo">DATAFLOW IA</div>
+        <div class="footer-links">
+            <span><i class="fas fa-globe"></i> www.dataflowia.com</span>
+            <span><i class="fas fa-envelope"></i> contacto@dataflowia.com</span>
+        </div>
+        <div class="copyright">
+            &copy; 2025 TODOS LOS DERECHOS RESERVADOS
+        </div>
+    </footer>
+
+    <script>
+        // JavaScript for Accordion functionality and Metric Animation
+        function toggleAccordion(id) {
+            const currentItem = document.getElementById(id);
+            const content = currentItem.querySelector('.accordion-content');
+            const header = currentItem.querySelector('.accordion-header');
+
+            // Check if the current item is already active
+            const isActive = header.classList.contains('active');
+
+            // Close all other items
+            document.querySelectorAll('.accordion-item').forEach(item => {
+                const otherContent = item.querySelector('.accordion-content');
+                const otherHeader = item.querySelector('.accordion-header');
+                otherContent.classList.remove('active');
+                otherHeader.classList.remove('active');
+                otherContent.style.maxHeight = null;
+                // Reset metric bars in other sections
+                item.querySelectorAll('.metric-bar-fill').forEach(bar => {
+                    bar.style.width = '0%';
+                });
+            });
+
+            // Open or close the clicked item
+            if (!isActive) {
+                header.classList.add('active');
+                content.classList.add('active');
+                content.style.maxHeight = content.scrollHeight + "px";
+
+                // Animate metric bars
+                content.querySelectorAll('.metric-bar-fill').forEach(bar => {
+                    const width = bar.getAttribute('data-width');
+                    // Use a slight delay to ensure the content is fully opened first
+                    setTimeout(() => {
+                        bar.style.width = width;
+                    }, 100); 
+                });
+            } else {
+                header.classList.remove('active');
+                content.classList.remove('active');
+                content.style.maxHeight = null;
+                // Reset metric bars when closing
+                content.querySelectorAll('.metric-bar-fill').forEach(bar => {
+                    bar.style.width = '0%';
+                });
+            }
+        }
+    </script>
+</body>
+</html>
