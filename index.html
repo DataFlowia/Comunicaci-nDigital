@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DataFlowIA - Comunicación en la Era de la IA</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+            color: #f1f5f9;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Animated Background Blobs */
+        .blob-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.2;
+            mix-blend-mode: screen;
+        }
+
+        .blob-1 {
+            width: 400px;
+            height: 400px;
+            background: #3b82f6;
+            top: 0;
+            left: 0;
+            animation: blob-move 7s infinite ease-in-out;
+        }
+
+        .blob-2 {
+            width: 400px;
+            height: 400px;
+            background: #06b6d4;
+            top: 33%;
+            right: 0;
+            animation: blob-move 7s infinite ease-in-out 2s;
+        }
+
+        .blob-3 {
+            width: 400px;
+            height: 400px;
+            background: #4f46e5;
+            bottom: 0;
+            left: 33%;
+            animation: blob-move 7s infinite ease-in-out 4s;
+        }
+
+        @keyframes blob-move {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -50px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
+        }
+
+        /* Main Content */
+        .container {
+            position: relative;
+            z-index: 10;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 60px;
+            animation: slideDown 0.8s ease-out;
+        }
+
+        .logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            font-size: 28px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #06b6d4, #3b82f6, #4f46e5);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 10px rgba(6, 182, 212, 0.3);
+        }
+
+        .logo i {
+            font-size: 32px;
+            color: #06b6d4;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            line-height: 1.2;
+            color: #fff;
+        }
+
+        h1 .gradient {
+            background: linear-gradient(135deg, #06b6d4, #3b82f6);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: #cbd5e1;
+            max-width: 700px;
+            margin: 20px auto;
+        }
+
+        /* Stats Row */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 60px;
+        }
+
+        .stat-box {
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid rgba(71, 85, 105, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .stat-box:hover {
+            transform: translateY(-5px);
+            border-color: rgba(6, 182, 212, 0.5);
+            box-shadow: 0 0 20px rgba(6, 182, 212, 0.2);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #06b6d4, #3b82f6);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: #94a3b8;
+            margin-top: 8px;
+        }
+
+        /* Section */
+        section {
+            margin-bottom: 80px;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .section-badge {
+            display: inline-block;
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(71, 85, 105, 0.3);
+            border-radius: 20px;
+            padding: 8px 16px;
+            font-size: 0.85rem;
+            color: #06b6d4;
+            margin-bottom: 12px;
+            backdrop-filter: blur(10px);
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            color: #fff;
+            margin-bottom: 10px;
+        }
+
+        /* Cards Grid */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-top: 30px;
+        }
+
+        .card {
+            background: rgba(30, 27, 75, 0.5);
+            border: 1px solid rgba(71, 85, 105, 0.3);
+            border-radius: 16px;
+            padding: 24px;
+            backdrop-filter: blur(10px);
+            cursor: pointer;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(6, 182, 212, 0.1), rgba(79, 70, 229, 0.1));
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(6, 182, 212, 0.5);
+            box-shadow: 0 10px 40px rgba(6, 182, 212, 0.15);
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+            cursor: pointer;
+            position: relative;
+            z-index: 2;
+        }
+
+        .card-icon {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(6, 182, 212, 0.2);
+            border-radius: 10px;
+            color: #06b6d4;
+            font-size: 1.3rem;
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #fff;
+            flex: 1;
+        }
+
+        .card-toggle {
+            font-size: 1.2rem;
+            color: #94a3b8;
+            transition: transform 0.3s ease;
+        }
+
+        .card.expanded .card-toggle {
+            transform: rotate(180deg);
+        }
+
+        .card-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+            position: relative;
+            z-index: 2;
+        }
+
+        .card.expanded .card-content {
+            max-height: 500px;
+        }
+
+        .card-content ul {
+            list-style: none;
+        }
+
+        .card-content li {
+            display: flex;
+            gap: 10px;
+            padding: 10px 0;
+            color: #cbd5e1;
+            font-size: 0.95rem;
+            align-items: flex-start;
+        }
+
+        .card-content li:before {
+            content: '→';
+            color: #06b6d4;
+            font-weight: bold;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        /* Ecosystem Section */
+        .ecosystem {
+            background: rgba(30, 27, 75, 0.5);
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            border-radius: 20px;
+            padding: 40px;
+            backdrop-filter: blur(10px);
+        }
+
+        .ecosystem-header {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+            margin-bottom: 30px;
+        }
+
+        .ecosystem-icon {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(6, 182, 212, 0.2);
+            border-radius: 12px;
+            color: #06b6d4;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .ecosystem-title {
+            font-size: 1.8rem;
+            color: #fff;
+            margin-bottom: 10px;
+        }
+
+        .ecosystem-desc {
+            color: #cbd5e1;
+        }
+
+        .ecosystem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .ecosystem-item h4 {
+            font-size: 1.2rem;
+            color: #06b6d4;
+            margin-bottom: 15px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .ecosystem-item h4::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 30px;
+            height: 3px;
+            background: linear-gradient(90deg, #06b6d4, #3b82f6);
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        .ecosystem-item:hover h4::before {
+            width: 60px;
+        }
+
+        .ecosystem-item ul {
+            list-style: none;
+        }
+
+        .ecosystem-item li {
+            display: flex;
+            gap: 10px;
+            padding: 10px 0;
+            color: #cbd5e1;
+            font-size: 0.95rem;
+            align-items: flex-start;
+        }
+
+        .ecosystem-item li:before {
+            content: '✓';
+            color: #06b6d4;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        /* Conclusion */
+        .conclusion-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .conclusion-card {
+            background: rgba(30, 27, 75, 0.5);
+            border: 1px solid rgba(71, 85, 105, 0.3);
+            border-radius: 16px;
+            padding: 24px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .conclusion-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(6, 182, 212, 0.5);
+            box-shadow: 0 10px 30px rgba(6, 182, 212, 0.1);
+        }
+
+        .conclusion-icon {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(6, 182, 212, 0.2);
+            border-radius: 10px;
+            color: #06b6d4;
+            font-size: 1.3rem;
+            margin-bottom: 12px;
+        }
+
+        .conclusion-card h4 {
+            font-size: 1.2rem;
+            color: #06b6d4;
+            margin-bottom: 10px;
+        }
+
+        .conclusion-card p {
+            color: #cbd5e1;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid rgba(71, 85, 105, 0.3);
+            padding: 40px 0;
+            text-align: center;
+            color: #94a3b8;
+            font-size: 0.95rem;
+        }
+
+        footer a {
+            color: #06b6d4;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        footer a:hover {
+            color: #3b82f6;
+        }
+
+        /* Animations */
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .section-header h2 {
+                font-size: 1.8rem;
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .ecosystem {
+                padding: 24px;
+            }
+
+            .ecosystem-header {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="blob-container">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div class="logo">
+                <i class="fas fa-sparkles"></i>
+                DATAFLOW IA
+            </div>
+            <h1>La Comunicación en la Era de la <span class="gradient">Inteligencia Artificial</span></h1>
+            <p class="subtitle">Descubre cómo la IA revoluciona la estrategia comunicativa, maximizando eficiencia, impacto y medición sin perder el toque humano.</p>
+
+            <!-- Stats -->
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="stat-number">3x</div>
+                    <div class="stat-label">Mayor eficiencia</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">87%</div>
+                    <div class="stat-label">ROI mejorado</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">∞</div>
+                    <div class="stat-label">Escalabilidad</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">24/7</div>
+                    <div class="stat-label">Disponibilidad</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label">Omnicanal</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">∞</div>
+                    <div class="stat-label">Posibilidades</div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Section 1: Fundamentos -->
+        <section>
+            <div class="section-header">
+                <span class="section-badge">Fundamentos</span>
+                <h2>Los Pilares del Cambio</h2>
+            </div>
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon"><i class="fas fa-comments"></i></div>
+                        <div class="card-title">Comunicación</div>
+                    </div>
+                    <div class="card-content">
+                        <ul>
+                            <li>Proceso dinámico: Emisor → Mensaje → Receptor</li>
+                            <li>Objetivo: Generar comprensión, acción y transformación</li>
+                            <li>Canales: Verbal, visual, tecnológico y emocional</li>
+                            <li>Impacto: Conexión humana en el centro estratégico</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon"><i class="fas fa-brain"></i></div>
+                        <div class="card-title">IA Estratégica</div>
+                    </div>
+                    <div class="card-content">
+                        <ul>
+                            <li>Herramienta de aprendizaje, análisis y generación</li>
+                            <li>Potencia: Multiplica capacidades humanas exponencialmente</li>
+                            <li>Función: Orquestador inteligente de estrategias</li>
+                            <li>Sinergia: Humano + IA = Resultados extraordinarios</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Los 3 Pilares -->
+        <section>
+            <div class="section-header">
+                <span class="section-badge">Maximización</span>
+                <h2>Los 3 Pilares de Ventaja</h2>
+            </div>
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon"><i class="fas fa-bolt"></i></div>
+                        <div class="card-title">Eficiencia Máxima</div>
+                        <span class="card-toggle">▼</span>
+                    </div>
+                    <div class="card-content">
+                        <ul>
+                            <li>Automatización inteligente de decisiones comunicativas</li>
+                            <li>Selección optimizada del canal de entrega correcto</li>
+                            <li>Integración multicanal sin fricción operativa</li>
+                            <li>Reducción de tiempos: de días a minutos</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon"><i class="fas fa-bullseye"></i></div>
+                        <div class="card-title">Impacto Exponencial</div>
+                        <span class="card-toggle">▼</span>
+                    </div>
+                    <div class="card-content">
+                        <ul>
+                            <li>Segmentación predictiva hiper-precisa</li>
+                            <li>Personalización dinámica en tiempo real</li>
+                            <li>Orquestación omnicanal fluida y coherente</li>
+                            <li>Engagement multiplicado por 3-5x</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon"><i class="fas fa-chart-bar"></i></div>
+                        <div class="card-title">Medición Inteligente</div>
+                        <span class="card-toggle">▼</span>
+                    </div>
+                    <div class="card-content">
+                        <ul>
+                            <li>Métricas de impacto real, no vanidad</li>
+                            <li>Dashboards unificados y en tiempo real</li>
+                            <li>Optimización continua del ROI</li>
+                            <li>Predicción de resultados futuros</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Ecosistema -->
+        <section>
+            <div class="section-header">
+                <span class="section-badge">Arquitectura</span>
+                <h2>Ecosistema Omnicanal Integrado</h2>
+            </div>
+            <div class="ecosystem">
+                <div class="ecosystem-header">
+                    <div class="ecosystem-icon"><i class="fas fa-network-wired"></i></div>
+                    <div>
+                        <h3 class="ecosystem-title">Ecosistema Omnicanal Integrado</h3>
+                        <p class="ecosystem-desc">La IA no actúa en aislamiento. Orquesta una arquitectura compleja de herramientas, canales y formatos para entregar mensajes coherentes, precisos y en el momento exacto.</p>
+                    </div>
+                </div>
+                <div class="ecosystem-grid">
+                    <div class="ecosystem-item">
+                        <h4>Arquitectura Central</h4>
+                        <ul>
+                            <li>Procesamiento de datos</li>
+                            <li>Modelos predictivos</li>
+                            <li>Generación de contenido</li>
+                            <li>Análisis de resultados</li>
+                        </ul>
+                    </div>
+                    <div class="ecosystem-item">
+                        <h4>Tipos de Mensajes</h4>
+                        <ul>
+                            <li>Contenido personalizado</li>
+                            <li>Recomendaciones inteligentes</li>
+                            <li>Alertas contextuales</li>
+                            <li>Experiencias interactivas</li>
+                        </ul>
+                    </div>
+                    <div class="ecosystem-item">
+                        <h4>Canales de Entrega</h4>
+                        <ul>
+                            <li>Email + SMS + Push</li>
+                            <li>Social Media + Web</li>
+                            <li>Chat + Voz (IA conversacional)</li>
+                            <li>Display + Video + AR/VR</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Conclusión -->
+        <section>
+            <div class="section-header">
+                <span class="section-badge">Conclusión Estratégica</span>
+                <h2>El Futuro es Hoy</h2>
+            </div>
+            <div class="conclusion-grid">
+                <div class="conclusion-card">
+                    <div class="conclusion-icon"><i class="fas fa-comment-slash"></i></div>
+                    <h4>No Reemplaza</h4>
+                    <p>La IA es una herramienta de soporte vital, nunca sustituye la creatividad y sensibilidad humana.</p>
+                </div>
+                <div class="conclusion-card">
+                    <div class="conclusion-icon"><i class="fas fa-chart-line"></i></div>
+                    <h4>Potencia Alcance</h4>
+                    <p>Amplifica exponencialmente la capacidad para transformar, conectar y cautivar audiencias globales.</p>
+                </div>
+                <div class="conclusion-card">
+                    <div class="conclusion-icon"><i class="fas fa-brain"></i></div>
+                    <h4>Exige Habilidades</h4>
+                    <p>Requiere creatividad, expertise técnico y crucialmente, sensibilidad ética y social.</p>
+                </div>
+                <div class="conclusion-card">
+                    <div class="conclusion-icon"><i class="fas fa-check-circle"></i></div>
+                    <h4>Garantía de Calidad</h4>
+                    <p>Asegura mensajes relevantes, inclusivos, eficaces y profundamente resonantes.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>
+            <i class="fas fa-globe"></i>
+            <a href="https://www.dataflowia.com">www.dataflowia.com</a> •
+            <a href="mailto:contacto@dataflowia.com">contacto@dataflowia.com</a>
+        </p>
+        <p>&copy; 2025 DataFlowIA. Todos los derechos reservados.</p>
+    </footer>
+
+    <script>
+        // Card Toggle Functionality
+        document.querySelectorAll('.card-header').forEach(header => {
+            header.addEventListener('click', () => {
+                const card = header.closest('.card');
+                card.classList.toggle('expanded');
+            });
+        });
+
+        // Expand first cards by default
+        document.querySelectorAll('.card').forEach((card, index) => {
+            if (index < 2) {
+                card.classList.add('expanded');
+            }
+        });
+    </script>
+</body>
+</html>
